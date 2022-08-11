@@ -52,12 +52,26 @@ class Game {
 
       var index = 0
       for ( var plr in allPlayers){ // for .. in
-       
+       index++
+        var x= allPlayers[plr].positionX
+        var y= height-allPlayers[plr].positionY
+        cars[index-1].position.x=x
+        cars[index-1].position.y=y
+        if(index===player.index){
+          camera.position.y=cars[index-1].position.y;
+        }  
+
+
       }
-     
+     this.controles()
       drawSprites(); 
     }
   }
-
+  controles(){
+    if(keyIsDown(UP_ARROW)){
+      player.positionY+=10
+      player.update()
+    }
+  }
   
 }
