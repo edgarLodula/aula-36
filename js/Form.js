@@ -26,19 +26,28 @@ class Form {
     this.input.hide();
   }
 
+  
+  button(){
+    this.playButton.mousePressed(
+    ()=>{
+      this.input.hide();
+      this.playButton.hide();
+      this.greeting.html(`Olá ${this.input.value()}, espere outro jogador entrar <3 `)
+      
+      playerCount +=1
+      player.name = this.input.value()
+      player.index= playerCount;
+      player.addPlayer()
+      player.updateCount(playerCount)
+      player.getDistance();
+    }
+    )
+  }
+
   display() {
     this.setElementsPosition();
     this.setElementsStyle();
     this.button();
   }
-button(){
-  this.playButton.mousePressed(
-  ()=>{
-    this.input.hide();
-    this.playButton.hide();
-    this.greeting.html(`Olá ${this.input.value()}, espere outro jogador entrar <3 `)
-  }
-  )
-}
 
 }
