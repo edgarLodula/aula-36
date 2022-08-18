@@ -40,6 +40,47 @@ class Game {
 
     cars = [car1, car2];
 
+    fuels = new Group();
+    powerCoins = new Group();
+
+    // var obstaclesPositions = [
+    //   { x: width / 2 + 250, y: height - 800, image: obstacle2Image },
+    //   { x: width / 2 - 150, y: height - 1300, image: obstacle1Image },
+    //   { x: width / 2 + 250, y: height - 1800, image: obstacle1Image },
+    //   { x: width / 2 - 180, y: height - 2300, image: obstacle2Image },
+    //   { x: width / 2, y: height - 2800, image: obstacle2Image },
+    //   { x: width / 2 - 180, y: height - 3300, image: obstacle1Image },
+    //   { x: width / 2 + 180, y: height - 3300, image: obstacle2Image },
+    //   { x: width / 2 + 250, y: height - 3800, image: obstacle2Image },
+    //   { x: width / 2 - 150, y: height - 4300, image: obstacle1Image },
+    //   { x: width / 2 + 250, y: height - 4800, image: obstacle2Image },
+    //   { x: width / 2, y: height - 5300, image: obstacle1Image },
+    //   { x: width / 2 - 180, y: height - 5500, image: obstacle2Image }
+    // ];
+
+     
+    // Adicionar sprite de combustível no jogo
+    this.addSprites(fuels, 4, fuelImage, 0.02);
+
+    // Adicionar sprite de moeda no jogo
+    this.addSprites(powerCoins, 18, powerCoinImage, 0.09);
+
+
+  }
+
+  addSprites(spriteGroup, numberOfSprites, spriteImage, scale, POSICAO=[]){
+    for (var i = 0; i< numberOfSprites; i++ ){
+      var x, y;
+
+      x = random(width/2+150, width/2-150);
+      y = random(-height * 4.5, height-400)
+
+      var sprite = createSprite(x, y);
+      sprite.addImage("sprite", spriteImage);
+      sprite.scale = scale;
+      spriteGroup.add(sprite);
+
+    }
   }
 
   handleElements() {
