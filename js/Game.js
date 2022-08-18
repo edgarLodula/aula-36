@@ -93,6 +93,9 @@ class Game {
       }
      this.controles();
      this.showLeaderboard();
+
+     this.reset();
+
       drawSprites(); 
     }
   }
@@ -100,6 +103,14 @@ class Game {
   controles(){
     if(keyIsDown(UP_ARROW)){
       player.positionY+=10
+      player.update()
+    }
+    if(keyIsDown(LEFT_ARROW)){
+      player.positionX-=5
+      player.update()
+    }
+    if(keyIsDown(RIGHT_ARROW)){
+      player.positionX+=5
       player.update()
     }
   }
@@ -146,5 +157,18 @@ class Game {
     this.leader1.html(leader1);
     this.leader2.html(leader2);
   }
-
+  
+  reset(){
+    this.resetButton.mousePressed(
+    ()=>{
+      database.ref("/").set({
+        playerCount:0,
+        gameState:0,
+        players:{}
+    }
+    )
+    window.location.reload()
+  }
+    )
+  }
 }
