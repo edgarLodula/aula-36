@@ -42,21 +42,22 @@ class Game {
 
     fuels = new Group();
     powerCoins = new Group();
-
-    // var obstaclesPositions = [
-    //   { x: width / 2 + 250, y: height - 800, image: obstacle2Image },
-    //   { x: width / 2 - 150, y: height - 1300, image: obstacle1Image },
-    //   { x: width / 2 + 250, y: height - 1800, image: obstacle1Image },
-    //   { x: width / 2 - 180, y: height - 2300, image: obstacle2Image },
-    //   { x: width / 2, y: height - 2800, image: obstacle2Image },
-    //   { x: width / 2 - 180, y: height - 3300, image: obstacle1Image },
-    //   { x: width / 2 + 180, y: height - 3300, image: obstacle2Image },
-    //   { x: width / 2 + 250, y: height - 3800, image: obstacle2Image },
-    //   { x: width / 2 - 150, y: height - 4300, image: obstacle1Image },
-    //   { x: width / 2 + 250, y: height - 4800, image: obstacle2Image },
-    //   { x: width / 2, y: height - 5300, image: obstacle1Image },
-    //   { x: width / 2 - 180, y: height - 5500, image: obstacle2Image }
-    // ];
+    obstacles= new Group();
+    
+    var obstaclesPositions = [
+       { x: width / 2 + 250, y: height - 800, image: obstacle2Image },
+       { x: width / 2 - 150, y: height - 1300, image: obstacle1Image },
+       { x: width / 2 + 250, y: height - 1800, image: obstacle1Image },
+       { x: width / 2 - 180, y: height - 2300, image: obstacle2Image },
+      { x: width / 2, y: height - 2800, image: obstacle2Image },
+      { x: width / 2 - 180, y: height - 3300, image: obstacle1Image },
+      { x: width / 2 + 180, y: height - 3300, image: obstacle2Image },
+      { x: width / 2 + 250, y: height - 3800, image: obstacle2Image },
+      { x: width / 2 - 150, y: height - 4300, image: obstacle1Image },
+      { x: width / 2 + 250, y: height - 4800, image: obstacle2Image },
+      { x: width / 2, y: height - 5300, image: obstacle1Image },
+      { x: width / 2 - 180, y: height - 5500, image: obstacle2Image }
+    ];
 
      
     // Adicionar sprite de combustível no jogo
@@ -66,20 +67,30 @@ class Game {
     this.addSprites(powerCoins, 18, powerCoinImage, 0.09);
 
 
+    this.addSprites(obstacles,obstaclesPositions.length,obstacle1Image,0.04,obstaclesPositions)
+
   }
 
   addSprites(spriteGroup, numberOfSprites, spriteImage, scale, POSICAO=[]){
     for (var i = 0; i< numberOfSprites; i++ ){
       var x, y;
-
-      x = random(width/2+150, width/2-150);
+      if(POSICAO.length>0){
+        x=POSICAO[i].x
+        y=POSICAO[i].y
+        spriteImage=POSICAO[i].image
+        
+      }
+      else{
+        x = random(width/2+150, width/2-150);
       y = random(-height * 4.5, height-400)
+      }
+     
 
       var sprite = createSprite(x, y);
       sprite.addImage("sprite", spriteImage);
       sprite.scale = scale;
       spriteGroup.add(sprite);
-
+      
     }
   }
 
@@ -128,6 +139,7 @@ class Game {
         cars[index-1].position.y=y
         if(index===player.index){
           camera.position.y=cars[index-1].position.y;
+          this.score(index);
         }  
 
 
@@ -137,8 +149,18 @@ class Game {
 
      this.reset();
 
+      
+     
       drawSprites(); 
     }
+  }
+
+  score(index){
+    cars[index-1].overlap(powerCoins,function(coletor,coletado){
+      player.score+=1
+      player.update()
+      coletado.remove()
+    })
   }
 
   controles(){
