@@ -48,7 +48,7 @@ class Game {
     form.titleImg.class("gameTitleAfterEffect"); // novo estilo do titulo
 
       //titulo e botão 
-      this.resetTitle.html("Reinicar Jogo");
+      this.resetTitle.html("Reiniciar");
       this.resetTitle.class("resetText");
       this.resetTitle.position(width / 2 + 200, 40);
   
