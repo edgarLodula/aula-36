@@ -6,6 +6,8 @@ class Player {
     this.positionY =0;
     this.rank = 0; // ranking 
     this.score = 0; // pontuação
+    this.fuel = 185; // combustível
+    this.life = 185; // vida 
    
   }
 
@@ -56,6 +58,18 @@ class Player {
       var data = data.val();
       this.positionX = data.positionX;
       this.positionY = data.positionY;
+    });
+  }
+
+  getCarsAtEnd() {
+    database.ref("carsAtEnd").on("value", data => {
+      this.rank = data.val();
+    });
+  }
+
+  static updateCarsAtEnd(rank) {
+    database.ref("/").update({
+      carsAtEnd: rank
     });
   }
 

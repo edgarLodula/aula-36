@@ -124,10 +124,11 @@ class Game {
     this.handleElements(); // para apagar o form
  
     Player.getPlayersInfo(); 
-   
+    player.getCarsAtEnd();
+
     if (allPlayers !== undefined) {  // pois antes de ter jogador, é indefinido! 
-   // if (playerCount ===2) {
-    image(track, 0, -height * 5, width, height * 6); // add imagem da pista
+        // if (playerCount ===2) {
+      image(track, 0, -height * 5, width, height * 6); // add imagem da pista
      
 
       var index = 0
@@ -140,19 +141,60 @@ class Game {
         if(index===player.index){
           camera.position.y=cars[index-1].position.y;
           this.score(index);
+          this.handleFuel(index);
         }  
 
 
       }
      this.controles();
      this.showLeaderboard();
-
      this.reset();
 
-      
-     
-      drawSprites(); 
+     //Linha de chegada
+
+     const finishLine = height*6-100;
+
+     if (player.positionY>finishLine){
+       gameState = 2;
+       player.rank += 1;
+       Player.updateCarsAtEnd(player.rank);
+       player.update(); 
+       this.showRank()
+     }
+
+     drawSprites(); 
+     this.showLife();
     }
+  }
+
+  showRank() {
+    swal({
+      title: `Incrível!${"\n"}Rank${"\n"}${player.rank}`,
+      text: "Você alcançou a linha de chegada com sucesso!",
+      imageUrl:
+        "https://raw.githubusercontent.com/vishalgaddam873/p5-multiplayer-car-race-game/master/assets/cup.png",
+      imageSize: "100x100",
+      confirmButtonText: "Ok"
+    });
+  }
+
+  showLife() {
+    push();
+    image(lifeImage, width / 2 - 130, height - player.positionY - 400, 20, 20);
+    fill("white");
+    rect(width / 2 - 100, height - player.positionY - 400, 185, 20);
+    fill("#f50057");
+    rect(width / 2 - 100, height - player.positionY - 400, player.life, 20);
+    noStroke();
+    pop();
+  }
+
+  handleFuel(index) {
+    //adicionando combustível
+    cars[index - 1].overlap(fuels, function(collector, collected) {
+      player.fuel = 185;
+      collected.remove();
+    });
   }
 
   score(index){
@@ -227,6 +269,7 @@ class Game {
       database.ref("/").set({
         playerCount:0,
         gameState:0,
+        carsAtEnd:0,
         players:{}
     }
     )
