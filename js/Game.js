@@ -7,6 +7,7 @@ class Game {
 
     this.leader1 = createElement("h2"); // condutor 1
     this.leader2 = createElement("h2"); // condutor 2
+    this.andando = false
   }
 
    getState() {  // 1º verificar o estado do jogo!
@@ -149,7 +150,10 @@ class Game {
      this.controles();
      this.showLeaderboard();
      this.reset();
-
+      if(this.andando){
+        player.positionY+=5
+        player.update()
+      }
      //Linha de chegada
 
      const finishLine = height*6-100;
@@ -164,6 +168,7 @@ class Game {
 
      drawSprites(); 
      this.showLife();
+     this.showGas();
     }
   }
 
@@ -195,6 +200,13 @@ class Game {
       player.fuel = 185;
       collected.remove();
     });
+    if(player.fuel>0 && this.andando ){
+      player.fuel = player.fuel -0.3
+    }
+    if(player.fuel <=0){
+      gameState=2
+      this.gameOver()
+    }
   }
 
   score(index){
@@ -209,6 +221,7 @@ class Game {
     if(keyIsDown(UP_ARROW)){
       player.positionY+=10
       player.update()
+      this.andando=true
     }
     if(keyIsDown(LEFT_ARROW)){
       player.positionX-=5
@@ -277,4 +290,26 @@ class Game {
   }
     )
   }
+  showGas(){
+    push();
+    image(fuelImage, width / 2 - 130, height - player.positionY - 300, 20, 20);
+    fill("white");
+    rect(width / 2 - 100, height - player.positionY - 300, 185, 20);
+    fill("#ffc400");
+    rect(width / 2 - 100, height - player.positionY - 300, player.fuel, 20);
+    noStroke();
+    pop();
+  }
+
+  gameOver(){
+    swal({
+      title: `Fim de jogo`,
+      text: "Você perdeu",
+      imageUrl:
+        "https://cdn.shopify.com/s/files/1/1061/1924/products/Thumbs_Down_Sign_Emoji_Icon_ios10_grande.png",
+      imageSize: "100x100",
+      confirmButtonText: "Ok"
+    });
+  }
+
 }
