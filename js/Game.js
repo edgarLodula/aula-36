@@ -7,7 +7,9 @@ class Game {
 
     this.leader1 = createElement("h2"); // condutor 1
     this.leader2 = createElement("h2"); // condutor 2
-    this.andando = false
+
+    this.andando = false;
+    this.leftkey = false; 
   }
 
    getState() {  // 1º verificar o estado do jogo!
@@ -33,10 +35,12 @@ class Game {
     // criando sprites dos carros
     car1 = createSprite(width / 2 - 50, height - 100);
     car1.addImage("car1", car1_img);
+    car1.addImage("blast", blastImage);
     car1.scale = 0.07;
 
     car2 = createSprite(width / 2 + 100, height - 100);
     car2.addImage("car2", car2_img);
+    car2.addImage("blast", blastImage);
     car2.scale = 0.07;
 
     cars = [car1, car2];
@@ -143,6 +147,7 @@ class Game {
           camera.position.y=cars[index-1].position.y;
           this.score(index);
           this.handleFuel(index);
+          this.colisionObstacles(index)
         }  
 
 
@@ -169,6 +174,16 @@ class Game {
      drawSprites(); 
      this.showLife();
      this.showGas();
+    }
+  }
+
+  colisionObstacles(index) {
+    if (cars[index - 1].collide(obstacles)) {
+      if (player.life > 0) {
+        player.life -= 185 / 4;
+      }
+
+      player.update();
     }
   }
 
@@ -224,10 +239,12 @@ class Game {
       this.andando=true
     }
     if(keyIsDown(LEFT_ARROW)){
+      this.leftkey = true;
       player.positionX-=5
       player.update()
     }
     if(keyIsDown(RIGHT_ARROW)){
+      this.leftkey = false;
       player.positionX+=5
       player.update()
     }
@@ -290,6 +307,7 @@ class Game {
   }
     )
   }
+
   showGas(){
     push();
     image(fuelImage, width / 2 - 130, height - player.positionY - 300, 20, 20);
