@@ -10,6 +10,7 @@ class Game {
 
     this.andando = false;
     this.leftkey = false; 
+    this.explosao=false;
   }
 
    getState() {  // 1º verificar o estado do jogo!
@@ -143,6 +144,11 @@ class Game {
         var y= height-allPlayers[plr].positionY
         cars[index-1].position.x=x
         cars[index-1].position.y=y
+        if(allPlayers[plr].life<=0){
+          cars[index-1].changeImage("blast")
+          cars[index-1].scale=0.3
+          this.andando=false
+        }
         if(index===player.index){
           camera.position.y=cars[index-1].position.y;
           this.score(index);
@@ -182,7 +188,15 @@ class Game {
       if (player.life > 0) {
         player.life -= 185 / 4;
       }
-
+      if(this.leftkey){
+        player.positionX+=100
+      }
+      else{
+        player.positionX-=100
+      }
+      if(player.life<=0){
+        this.explosao=true
+      }
       player.update();
     }
   }
@@ -233,6 +247,7 @@ class Game {
   }
 
   controles(){
+    if(!this.explosao){
     if(keyIsDown(UP_ARROW)){
       player.positionY+=10
       player.update()
@@ -247,7 +262,7 @@ class Game {
       this.leftkey = false;
       player.positionX+=5
       player.update()
-    }
+    }}
   }
   
   showLeaderboard() {
